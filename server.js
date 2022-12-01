@@ -69,3 +69,48 @@ const askQuestions = () => {
         }
     })
 };
+
+
+// allDepartments will show all current departments from department table.
+allDepartments = async () => {
+    const data = await db.promise().query('select * from department')
+    console.table(data[0])
+    askQuestions()
+}
+
+
+// allRoles will show all roles in role table.
+allRoles = async () => {
+    const data = await db.promise().query('select title, salary, department.name from role left join department on role.department_id=department.id')
+    console.table(data[0])
+    askQuestions()
+}
+
+
+// allEmployees will show all employees including fn, ln, title, salary, department, and if they are manager/assigned to a manager.
+allEmployees = async () => {
+    const data = await db.promise().query('select employee.first_name, employee.last_name, role.title, role.salary, department.name, manager.first_name as manager from employee left join role on role.id=employee.role_id left join department on department.id=role.department_id left join employee manager on employee.manager_id=manager.id')
+    console.table(data[0])
+    askQuestions()
+}
+
+
+// addDepartment will add a new department to list of departments in table.
+addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'department',
+            message: 'Name your new department',
+        }
+    ])
+
+    .then(async answer => {
+        const data = await db.promise().query('INSERT INTO department set ?', answer)
+        console.log('Sucessfully added ' + answer.addDepartment + ' to your department list');
+        askQuestions()
+    })
+};
+
+
+
