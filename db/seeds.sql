@@ -1,39 +1,20 @@
 
--- if the database exists, following code will drop it and create
-DROP DATABASE IF EXISTS team_db;
-CREATE DATABASE team_db;
 
-USE team_db;
-
--- Creating schema table for differnt deparments of employees
-CREATE TABLE department (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL
-);
+INSERT INTO (name)
+VALUES ("Audit"),
+        ("Payroll"),
+        ("Accounting"),
+        ("Marketing");
 
 
--- Creating schema table for roles of employee
-CREATE TABLE role (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30),
-    salary DECIMAL,
-    deparment_id INT,
-    FOREIGN KEY (department_id)
-    REFERENCES department(id)
-    ON DELETE SET NULL
-);
+INSERT INTO role (title, salary, deparment_id)
+VALUES ("Junior Auditor", 50000, 100),
+        ("Senior Auditor", 100000, 100),
+        ("Payroll Clerk", 50000, 200),
+        ("Payroll Manager", 100000, 200),
+        ("Junior Acccountant", 50000, 300),
+        ("Senior Accountant", 100000, 300),
+        ("Marketing Analyst", 50000, 400),
+        ("Marketing Manager", 100000, 400);
 
-
--- Creating schema table for employee
-CREATE TABLE employee (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(30),
-    last_name VARCHAR(30),
-    role_id INT,
-    FOREIGN KEY (role_id)
-    REFERENCES role(id)
-    manager_id INT,
-    FOREIGN KEY (manager_id)
-    REFERENCES employee(id)
-    ON DELETE SET NULL
-);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
