@@ -1,6 +1,7 @@
 
 
 const inquirer = require('inquirer');
+const { syncBuiltinESMExports } = require('module');
 const mysql = require('mysql2');
 const { allowedNodeEnvironmentFlags } = require('process');
 const { finished } = require('stream');
@@ -114,3 +115,96 @@ addDepartment = () => {
 
 
 
+newRole = async() => {
+    const departments = await db.promise().query('select id as value, name as name from department')
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'Input name of role you are adding',
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'List desired salary for new role',
+        },
+        {
+            type: 'list',
+            name: 'department_id',
+            message: 'Which department is your new role going to be in?',
+            choices: departments[0]
+        }
+    ])
+        .then(async answer => {
+            const data = await db.promise().query('INSERT INTO role set ?', answer)
+            console.log('Successfully added ' + answer.newRole + ' to Roles');
+            askQuestions()
+        })
+};
+
+
+
+newEmployee = async() => {
+    const roles = await db.promise().query('select id as value, title as name from role');
+    const employee = await db.promise().query('select is as value, first_name as name from employee');
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'List employee first name',
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'List employee last name',
+        },
+        {
+            type: 'list',
+            name: 'role_id',
+            message: 'List employee role',
+            choices: roles[0]
+        },
+        {
+            type: 'list', 
+            name: 'manager_id',
+            message: 'List manager of new employee',
+            choices: employee[0]
+        }
+    ])
+
+        .then(async answer => {
+            const data = await db.promise().query('INSERT INTO employee set ?', answer)
+            console.log('Successfully added ' + answer.firstName + answer.lastName + ' to employee list');
+            askQuestions()
+        })
+};
+
+
+
+changeRole = async() => {
+    const employee = await db.promise().query('select id as value, first_name as name from employee');
+    const roles = await db.promise().query('select id as value, title as name from role');
+
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Which employee are you updating?',
+            choices: employee[0]
+        },
+        {
+            type: 'list',
+            name: 'role_id',
+            message: 'Which role are you updating?',
+            choices: roles[0]
+        }
+    
+    ])
+
+    .then(async answer => {
+        const data = await db.promise().query('UPDATE employee set role_id = ? where id = ?', [answer.role_id, answer.id])
+        askQuestions()
+    });
+};
+
+askQuestions()
