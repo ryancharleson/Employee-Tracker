@@ -1,10 +1,7 @@
 
 
 const inquirer = require('inquirer');
-const { syncBuiltinESMExports } = require('module');
 const mysql = require('mysql2');
-const { allowedNodeEnvironmentFlags } = require('process');
-const { finished } = require('stream');
 
 //Connecting prompts in server.js to the team database
 const db = mysql.createConnection(
@@ -22,7 +19,7 @@ const db = mysql.createConnection(
 
 //Using inquierer to prompt user on what they would like to view in team database.
 const askQuestions = () => {
-    inquirer.createPromptModule([
+    inquirer.prompt([
        {
         type: 'list',
         name: 'select',
@@ -101,7 +98,7 @@ addDepartment = () => {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'department',
+            name: 'name',
             message: 'Name your new department',
         }
     ])
@@ -120,7 +117,7 @@ newRole = async() => {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'role',
+            name: 'title',
             message: 'Input name of role you are adding',
         },
         {
@@ -146,7 +143,7 @@ newRole = async() => {
 
 newEmployee = async() => {
     const roles = await db.promise().query('select id as value, title as name from role');
-    const employee = await db.promise().query('select is as value, first_name as name from employee');
+    const employee = await db.promise().query('select id as value, first_name as name from employee');
     inquirer.prompt([
         {
             type: 'input',
