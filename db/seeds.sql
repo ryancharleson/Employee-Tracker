@@ -18,3 +18,12 @@ VALUES ("Junior Auditor", 50000, 100),
         ("Marketing Manager", 100000, 400);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Ryan", "Charleson", 1, null),
+        ("James", "Bond", 2, 1),
+        ("Joe", "Shmoe", 3, null),
+        ("Billy", "Joel", 4, 3),
+        ("Linkin", "Park", 5, null),
+        ("Drake", "Aubrey", 6, 5),
+        ("Green", "Day", 7, null),
+        ("Fifty", "Scent", 8, 7);
+
